@@ -1,0 +1,13 @@
+Usage: wasm compiler -f file1 -f file2 ... {OPTIONS}
+
+Concatenates file1,file2,... with their respective flag, runs emscripten compiler, and concatenates compiled file implementation
+runner file.
+
+Options:
+    -c core-files            Core files for implementation
+    -r runner-file           Main file for implementation
+    -l library-files         Library files
+    -f compiler-flags        Compiler flags to be used
+    -i include-directories   Included directories for implementation
+
+See the emscripten documentation for options.

@@ -1,0 +1,40 @@
+{
+    "type": "compiler",
+    "short-name":"wasm",
+    "name": "wasm",
+    "supported-languages":[
+        "c",
+        "cpp"
+    ],
+    "target-languages":[
+        "wasm"
+    ],
+    "runner-name":"runner.js",
+    "commands": [
+        {   "executable-path": { "file": "./bin/cmd.js" },
+            "options": [
+                { 
+                    "prefix": "-c", 
+                    "value": { "config": "/implementation/core-source-files"}
+                },
+                { 
+                    "prefix": "-l", 
+                    "value": { "config": "/implementation/libraries", "optional": true }
+                },
+                { 
+                    "prefix": "-r", 
+                    "value": { "config": "/implementation/runner-source-file"}
+                },
+                {
+                    "prefix":"-i",
+                    "value":{"config":"/implementation/include-directories","optional": true }
+                },
+                {
+                    "prefix":"-f",
+                    "value":{ "config": "/implementation/compilation-flags", "optional": true }
+                }
+               
+            ]
+        }
+    ]
+}

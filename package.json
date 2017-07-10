@@ -1,0 +1,20 @@
+{
+  "name": "ostrich-wasm-compiler",
+  "version": "1.0.0",
+  "description": "Ostrich wasm compiler",
+  "main": "bin/cmd.js",
+  "bin": {
+    "ostrich-wasm-compiler": "cmd.js"
+  },
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-replace": "^0.5.4",
+    "gulp-concat": "^2.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "David Herrera",
+  "license": "APACHE"
+}
