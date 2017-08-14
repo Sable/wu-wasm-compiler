@@ -3,11 +3,10 @@
     "short-name":"wasm",
     "name": "wasm",
     "supported-languages":[
-        "c",
-        "cpp"
+        "wasm"
     ],
     "target-languages":[
-        "wasm"
+        "js"
     ],
     "runner-name":"runner.js",
     "commands": [
@@ -22,18 +21,31 @@
                     "value": { "config": "/implementation/libraries", "optional": true }
                 },
                 { 
-                    "prefix": "-r", 
+                    "prefix": "-f", 
                     "value": { "config": "/implementation/runner-source-file"}
+                },
+                {
+                    "prefix": "-p",
+                    "value":{ "config": "/implementation/precompiled-files","optional": true }
+                },
+                {
+                    "prefix":"-m",
+                    "value":{"config":"/implementation/total-memory","optional": true }
                 },
                 {
                     "prefix":"-i",
                     "value":{"config":"/implementation/include-directories","optional": true }
                 },
                 {
-                    "prefix":"-f",
-                    "value":{ "config": "/implementation/compilation-flags", "optional": true }
-                }
-               
+                    "prefix":"-s",
+                    "value":{"config":"/implementation/dserial","optional": true  }
+                },
+                {
+                    "prefix":"-t",
+                    "value":{"config":"/implementation/std","optional": true }
+                },
+                " -o ", { "config": "/compiler/runner-name"},
+                " -d",  { "config": "/compiler/runner-name" }
             ]
         }
     ]
