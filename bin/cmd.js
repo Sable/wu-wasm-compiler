@@ -6,7 +6,6 @@ var argv = require('minimist')(process.argv.slice(2));
 
 var gulp = require('gulp');
 var concat = require('gulp-concat');
-var colors = require('colors');
 var exec = require('child_process').exec;
 
 if (argv._[0] === 'help' || argv.h || argv.help
@@ -31,8 +30,8 @@ var precompiled_files = checkArgs(argv,'p');
 
 //Joining files
 core_files = core_files.concat(libraries).join(" ");
-var emscriptenCompilerCmd = `${path.join(__dirname, '../emscripten/incoming/emcc')} -O2 ${core_files}  -s ASSERTIONS=1 -s WASM=1 -o c-wasm.js -s EXPORTED_FUNCTIONS="['_main']"  -s TOTAL_MEMORY=536870912 `;// --pre-js ${path.join(__dirname,'../runner.js' )} `;
-if(argv.m) emscriptenCompilerCmd+= ` -s TOTAL_MEMORY=${argv.m} `;
+var emscriptenCompilerCmd = `emcc -O2 ${core_files}  -s ASSERTIONS=1 -s WASM=1 -o c-wasm.js -s EXPORTED_FUNCTIONS="['_main']"  -s ALLOW_MEMORY_GROWTH=1 `;// --pre-js ${path.join(__dirname,'../runner.js' )} `;
+//if(argv.m) emscriptenCompilerCmd+= ` -s TOTAL_MEMORY=${argv.m} `;
 if(argv.t) emscriptenCompilerCmd+= ` -std=${argv.t} `;
 if(argv.s) emscriptenCompilerCmd+= ` -DSERIAL `;
 
@@ -49,10 +48,9 @@ exec(emscriptenCompilerCmd, function(error, stdout, stderr) {
   // command output is in stdout
   if(error)
   {
-        console.log(colors.red('Error processing file'), error);
+        console.log('Error compiling to WASM: ', error);
         process.exit(1);
   }
-  console.log(colors.green('Successfully compiled WASM'));
   inputs.push(path.join(__dirname, '../runner.js'));  
   inputs.push('c-wasm.js');
   inputs.push(path.join(__dirname, '../exports.js'));
