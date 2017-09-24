@@ -40,7 +40,6 @@ emscriptenCompilerCmd = appendPathsWithPrefix(emscriptenCompilerCmd, precompiled
 //Append include directories
 emscriptenCompilerCmd = appendPathsWithPrefix(emscriptenCompilerCmd, include_directories, "-I");
 
-console.log(emscriptenCompilerCmd);
 
 
 var inputs = [];
