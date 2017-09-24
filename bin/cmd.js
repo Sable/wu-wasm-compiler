@@ -9,16 +9,15 @@ var concat = require('gulp-concat');
 var exec = require('child_process').exec;
 
 if (argv._[0] === 'help' || argv.h || argv.help
-|| typeof argv.c === 'undefined'
+|| (typeof argv.c === 'undefined' || typeof argv.r === 'undefined')
 || (process.argv.length <= 1 && process.stdin.isTTY)) {
     return fs.createReadStream(__dirname + '/usage.txt')
         .pipe(process.stdout)
-        .on('close', function () { process.exit(1) })
-    ;
+        .on('close', function () { process.exit(1) });
 }
 //Add core files
-var core_files = checkArgs(argv,'c');
-
+var core_files = checkArgs(argv,'c') || [];
+core_files  = core_files.concat(checkArgs(argv,'r')||[]);
 //Add Include directories
 var include_directories = checkArgs(argv,'i');
 
@@ -41,6 +40,7 @@ emscriptenCompilerCmd = appendPathsWithPrefix(emscriptenCompilerCmd, precompiled
 //Append include directories
 emscriptenCompilerCmd = appendPathsWithPrefix(emscriptenCompilerCmd, include_directories, "-I");
 
+console.log(emscriptenCompilerCmd);
 
 
 var inputs = [];
@@ -56,12 +56,6 @@ exec(emscriptenCompilerCmd, function(error, stdout, stderr) {
   inputs.push(path.join(__dirname, '../exports.js'));
   gulp.src(inputs).pipe(concat(argv.o)||process.stdout).pipe(gulp.dest('./')||process.stdout);
 });
-
-
-
-
-
-
 
 function appendPathsWithPrefix(emsCommand, paths, prefix)
 {
