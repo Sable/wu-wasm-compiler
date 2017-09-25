@@ -9,7 +9,7 @@ var concat = require('gulp-concat');
 var exec = require('child_process').exec;
 
 if (argv._[0] === 'help' || argv.h || argv.help
-|| (typeof argv.c === 'undefined' || typeof argv.r === 'undefined')
+|| (typeof argv.c === 'undefined' && typeof argv.r === 'undefined')
 || (process.argv.length <= 1 && process.stdin.isTTY)) {
     return fs.createReadStream(__dirname + '/usage.txt')
         .pipe(process.stdout)
@@ -17,7 +17,7 @@ if (argv._[0] === 'help' || argv.h || argv.help
 }
 //Add core files
 var core_files = checkArgs(argv,'c') || [];
-core_files  = core_files.concat(checkArgs(argv,'r')||[]);
+core_files  = core_files.concat(checkArgs(argv,'r'));
 //Add Include directories
 var include_directories = checkArgs(argv,'i');
 
@@ -32,7 +32,7 @@ var compilation_flags = checkArgs(argv,'f');
 
 //Joining files
 core_files = core_files.concat(libraries).join(" ");
-var emscriptenCompilerCmd = `emcc -O2 ${core_files} -s ASSERTIONS=1 -s WASM=1 -o c-wasm.js -s EXPORTED_FUNCTIONS="['_main']"  -s ALLOW_MEMORY_GROWTH=1 `;// --pre-js ${path.join(__dirname,'../runner.js' )} `;
+var emscriptenCompilerCmd = `emcc -O2 ${core_files} -W  -s ASSERTIONS=1 -s WASM=1 -o c-wasm.js -s EXPORTED_FUNCTIONS="['_main']"  -s ALLOW_MEMORY_GROWTH=1 `;// --pre-js ${path.join(__dirname,'../runner.js' )} `;
 //if(argv.m) emscriptenCompilerCmd+= ` -s TOTAL_MEMORY=${argv.m} `;
 
 
@@ -105,4 +105,3 @@ function checkArgs(argv,flag)
     }
     return arr;    
 }
-
