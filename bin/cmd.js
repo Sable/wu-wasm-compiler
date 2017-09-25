@@ -27,20 +27,23 @@ var libraries = checkArgs(argv,'l');
 //add precompiled files
 var precompiled_files = checkArgs(argv,'p');
 
+//get compilation flags
+var compilation_flags = checkArgs(argv,'f');
+
 //Joining files
 core_files = core_files.concat(libraries).join(" ");
-var emscriptenCompilerCmd = `emcc -O2 ${core_files}  -s ASSERTIONS=1 -s WASM=1 -o c-wasm.js -s EXPORTED_FUNCTIONS="['_main']"  -s ALLOW_MEMORY_GROWTH=1 `;// --pre-js ${path.join(__dirname,'../runner.js' )} `;
+var emscriptenCompilerCmd = `emcc -O2 ${core_files} -s ASSERTIONS=1 -s WASM=1 -o c-wasm.js -s EXPORTED_FUNCTIONS="['_main']"  -s ALLOW_MEMORY_GROWTH=1 `;// --pre-js ${path.join(__dirname,'../runner.js' )} `;
 //if(argv.m) emscriptenCompilerCmd+= ` -s TOTAL_MEMORY=${argv.m} `;
-if(argv.t) emscriptenCompilerCmd+= ` -std=${argv.t} `;
-if(argv.s) emscriptenCompilerCmd+= ` -DSERIAL `;
 
-//Append precompiled files
-emscriptenCompilerCmd = appendPathsWithPrefix(emscriptenCompilerCmd, precompiled_files, "--preload-file ");
 
 //Append include directories
 emscriptenCompilerCmd = appendPathsWithPrefix(emscriptenCompilerCmd, include_directories, "-I");
 
+//Append compilation flags 
+emscriptenCompilerCmd = appendCompilationFlags(emscriptenCompilerCmd, compilation_flags);
 
+//Append precompiled files
+emscriptenCompilerCmd = appendPathsWithPrefix(emscriptenCompilerCmd, precompiled_files, "--preload-file ");
 
 var inputs = [];
 exec(emscriptenCompilerCmd, function(error, stdout, stderr) {
@@ -72,6 +75,23 @@ function appendPathsWithPrefix(emsCommand, paths, prefix)
     return emsCommand;
 }
 
+function appendCompilationFlags(emsCommand, flags)
+{
+    if(flags)
+    {
+        if(typeof flags == 'string')
+        {
+                emsCommand = `${emsCommand} ${flags} `;
+        }else{
+            flags.forEach((flag)=>{
+                flag = (flag === 'c99')? '-std=c99':flag;
+                emsCommand = `${emsCommand} ${flag} `;
+            });
+        }
+    }
+    return emsCommand;
+}
+
 function checkArgs(argv,flag)
 {
     var arr;
@@ -85,3 +105,4 @@ function checkArgs(argv,flag)
     }
     return arr;    
 }
+

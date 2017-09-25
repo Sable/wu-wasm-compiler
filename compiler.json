@@ -37,14 +37,11 @@
                     "value":{"config":"/implementation/include-directories","optional": true }
                 },
                 {
-                    "prefix":"-s",
-                    "value":{"config":"/implementation/dserial","optional": true  }
+                    "prefix":"-f",
+                    "value":{ "config": "/implementation/compilation-flags", "optional": true }
                 },
-                {
-                    "prefix":"-t",
-                    "value":{"config":"/implementation/std","optional": true }
-                },
-                " -o ", { "config": "/compiler/runner-name"}            ]
+                " -o ", { "config": "/compiler/runner-name"}            
+            ]
         }
     ]
 }
