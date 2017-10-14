@@ -9,5 +9,7 @@ Options:
     -l library-files         Library files
     -f compiler-flags        Compiler flags to be used
     -i include-directories   Included directories for implementation
+    -p precompiled-files     Emscripten input files
+    -o runner-name           Name of the object file to produce
 
 See the emscripten documentation for options.

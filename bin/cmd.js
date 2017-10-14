@@ -43,7 +43,7 @@ emscriptenCompilerCmd = appendPathsWithPrefix(emscriptenCompilerCmd, include_dir
 emscriptenCompilerCmd = appendCompilationFlags(emscriptenCompilerCmd, compilation_flags);
 
 //Append precompiled files
-emscriptenCompilerCmd = appendPathsWithPrefix(emscriptenCompilerCmd, precompiled_files, "--preload-file ");
+emscriptenCompilerCmd = appendFilePathsWithPrefix(emscriptenCompilerCmd, precompiled_files, "--preload-file ");
 
 var inputs = [];
 exec(emscriptenCompilerCmd, function(error, stdout, stderr) {
@@ -104,4 +104,22 @@ function checkArgs(argv,flag)
         }
     }
     return arr;    
+}
+
+function appendFilePathsWithPrefix(emsCommand, paths, prefix)
+{
+    if(paths)
+    {
+        if(typeof paths == 'string')
+        {
+                //var filename = paths.substring(paths.lastIndexOf('/')+1,paths.length);
+                emsCommand = `${emsCommand} ${prefix}${paths}@${paths} `;
+        }else{
+            paths.forEach((file)=>{
+                //var filename = file.substring(file.lastIndexOf('/')+1,file.length);
+                emsCommand = `${emsCommand} ${prefix}${file}@${file} `;
+            });
+        }
+    }
+    return emsCommand;
 }
